@@ -82,7 +82,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ButtonLink href="/book" arrow className="hidden sm:inline-flex">
+          <ButtonLink href="/book" arrow className="max-sm:hidden">
             Book an Appointment
           </ButtonLink>
           <button
