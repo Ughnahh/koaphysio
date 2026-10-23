@@ -21,7 +21,7 @@ import type {
   TimeSlot,
   WeeklyHours,
 } from "./types";
-import { createMockClient } from "./mock/mock-client";
+import { createMockClient, resetMockState } from "./mock/mock-client";
 
 /** Public, unauthenticated operations used by the booking flow. */
 export interface BookingClient {
@@ -65,4 +65,10 @@ export function getBookingClient(): BookingClient {
 
 export function getAdminClient(): AdminClient {
   return instance().admin;
+}
+
+/** Prototype only: clears demo data stored in this browser tab. */
+export function resetPrototypeData(): void {
+  resetMockState();
+  mock = undefined;
 }

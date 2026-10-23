@@ -13,7 +13,11 @@ interface AsyncState<T> {
  * Load data for a cache key. `key === null` means "don't load yet".
  * The key must encode every input the loader depends on.
  */
-export function useAsyncData<T>(key: string | null, loader: () => Promise<T>): AsyncState<T> {
+export function useAsyncData<T>(
+  key: string | null,
+  loader: () => Promise<T>,
+  options: { keepPrevious?: boolean } = {},
+): AsyncState<T> {
   const [attempt, setAttempt] = useState(0);
   const requestKey = key === null ? null : `${key}#${attempt}`;
   const [result, setResult] = useState<{ key: string | null; data?: T; error?: unknown }>({ key: null });
@@ -23,7 +27,8 @@ export function useAsyncData<T>(key: string | null, loader: () => Promise<T>): A
     let active = true;
     loader().then(
       (data) => active && setResult({ key: requestKey, data }),
-      (error: unknown) => active && setResult({ key: requestKey, error: error ?? new Error("Unknown error") }),
+      (error: unknown) =>
+        active && setResult((prev) => ({ key: requestKey, data: prev.data, error: error ?? new Error("Unknown error") })),
     );
     return () => {
       active = false;
@@ -36,7 +41,8 @@ export function useAsyncData<T>(key: string | null, loader: () => Promise<T>): A
   const settled = requestKey !== null && result.key === requestKey;
 
   return {
-    data: settled ? result.data : undefined,
+    // With keepPrevious, the last loaded data stays visible while a new key loads.
+    data: settled || options.keepPrevious ? result.data : undefined,
     error: settled ? result.error : undefined,
     loading: requestKey !== null && !settled,
     retry,

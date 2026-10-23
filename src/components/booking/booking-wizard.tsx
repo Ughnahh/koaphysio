@@ -105,7 +105,8 @@ export function BookingWizard() {
         practitioner: draft.practitioner,
         startsAt: draft.slot.startsAt,
         serviceAreaId: draft.area?.id,
-        client: draft.details,
+        // Only home visits need an address; never send one for clinic appointments.
+        client: draft.mode === "home" ? draft.details : { ...draft.details, address: undefined },
         consent: draft.consent,
         idempotencyKey,
       });
