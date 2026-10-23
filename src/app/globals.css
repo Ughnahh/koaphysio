@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/*
+ * Koa design tokens — warm neutrals, near-black ink, generous radii.
+ * Derived from the client's reference design.
+ */
+@theme {
+  --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-ink: #151413;
+  --color-ink-soft: #2a2826;
+  --color-muted: #615b55;
+  --color-subtle: #8a837b;
+
+  --color-sand-50: #f8f6f3;
+  --color-sand-100: #f1eee9;
+  --color-sand-200: #e9e4dd;
+  --color-sand-300: #ddd6cc;
+  --color-sand-400: #c9bfb2;
+  --color-clay-500: #a38a73;
+
+  --color-success: #2f6b4f;
+  --color-success-bg: #e5efe8;
+  --color-warning: #8a5a12;
+  --color-warning-bg: #f6ecd9;
+  --color-danger: #9b2c2c;
+  --color-danger-bg: #f5e3e1;
+  --color-info: #2f4f6b;
+  --color-info-bg: #e3ebf2;
+
+  --radius-pill: 999px;
+  --tracking-eyebrow: 0.24em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-sand-100 text-ink font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight text-balance;
+  }
+
+  p {
+    @apply text-pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-sand-300);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-xs font-medium uppercase text-ink-soft;
+    letter-spacing: var(--tracking-eyebrow);
+  }
+
+  .prose-koa p {
+    @apply text-base leading-relaxed text-muted sm:text-lg;
+  }
+  .prose-koa p + p {
+    @apply mt-4;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+  .field-input {
+    @apply block w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-base text-ink placeholder:text-subtle transition-colors;
+    @apply hover:border-sand-400 focus:border-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink;
+  }
+  .field-input[aria-invalid="true"] {
+    @apply border-danger;
+  }
+  .field-error {
+    @apply mt-1.5 flex items-start gap-1.5 text-sm text-danger;
+  }
+  .field-hint {
+    @apply mt-1.5 text-sm text-muted;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-lg bg-sand-200;
+  }
+}
